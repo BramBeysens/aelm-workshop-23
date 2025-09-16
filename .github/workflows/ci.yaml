@@ -26,9 +26,9 @@ jobs:
         run: go build -o ../bin/workshop -v ./...
         working-directory: workshop-service
       - name: Upload /bin folder as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: workshop
+          name: workshop-${{ matrix.runs-on }}
           path: bin/
           retention-days: 1
   docker:
@@ -38,10 +38,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: workshop
           path: ./bin
+          pattern: workflow-*
+          merge-multiple: true
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: .
